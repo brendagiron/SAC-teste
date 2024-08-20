@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Função para criar um ticket e enviar um e-mail de notificação
-exports.createTicket = async (req, res) => {
+async function createTicket(req, res) {
   const { userId, sectorId, subject, description } = req.body; // Extrai os dados do corpo da requisição
   try {
     // Cria um novo ticket e obtém o ID do ticket criado
@@ -36,7 +36,7 @@ exports.createTicket = async (req, res) => {
 };
 
 // Função para atualizar o status de um ticket com um motivo de atraso
-exports.updateTicketStatusWithDelay = async (req, res) => {
+async function updateTicketStatusWithDelay(req, res) {
   const { ticketId, status, delayReason } = req.body; // Extrai os dados do corpo da requisição
   try {
     // Atualiza o status do ticket com o motivo do atraso
@@ -59,3 +59,10 @@ function getSectorEmail(sectorId) {
   // Retorna o e-mail correspondente ao ID do setor ou um e-mail padrão se o ID não for encontrado
   return sectorEmails[sectorId] || 'default@example.com';
 }
+
+// Exporta as funções
+module.exports = {
+    createTicket,
+    updateTicketStatusWithDelay,
+    getSectorEmail
+  };

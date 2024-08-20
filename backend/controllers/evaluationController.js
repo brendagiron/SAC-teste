@@ -1,7 +1,7 @@
 const Evaluation = require('../models/evaluation'); // Importa o modelo Evaluation para manipular avaliações
 
 // Função para criar uma nova avaliação para um ticket
-exports.createEvaluation = async (req, res) => {
+async function createEvaluation(req, res) {
   const { ticketId, rating, comment } = req.body; // Extrai os dados do corpo da requisição: ID do ticket, nota e comentário
   try {
     // Chama o método create do modelo Evaluation para registrar a avaliação
@@ -13,4 +13,8 @@ exports.createEvaluation = async (req, res) => {
     res.status(500).json({ message: 'Erro ao registrar avaliação.' });
   }
 };
+
+module.exports = {
+    createEvaluation
+}
 

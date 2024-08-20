@@ -3,7 +3,7 @@ const { Parser } = require('json2csv'); // Importa a classe Parser do módulo js
 const Ticket = require('../models/ticket'); // Importa o modelo Ticket para manipular tickets
 
 // Função para gerar um relatório em CSV dos tickets
-exports.generateReport = async (req, res) => {
+async function generateReport(req, res) {
   try {
     // Obtém todos os tickets do banco de dados
     const tickets = await Ticket.findAll();
@@ -21,3 +21,7 @@ exports.generateReport = async (req, res) => {
     res.status(500).json({ message: 'Erro ao gerar o relatório.' });
   }
 };
+
+module.exports = {
+    generateReport
+  };
