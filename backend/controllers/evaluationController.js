@@ -14,7 +14,5 @@ async function createEvaluation(req, res) {
   }
 };
 
-module.exports = {
-    createEvaluation
-}
+module.exports = createEvaluation;
 

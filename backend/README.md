@@ -42,8 +42,7 @@ Para instalar as dependências do backend, execute:
 cd backend
 npm install
 npm install axios
+npm install nodemailer
+npm install json2csv
+npm instal dotev
 npm start
-
-
-npm run dev: Executa o backend em modo de desenvolvimento.
-npm run start: Executa o backend em modo de produção.

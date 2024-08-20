@@ -14,12 +14,23 @@ class Ticket {
     return result.insertId; // Retorna o ID do ticket criado
   }
 
+  
+
   // Método estático para atualizar o status de um ticket com um motivo de atraso
   static async updateStatusWithDelayReason(id, status, delayReason) {
     // Executa uma consulta SQL para atualizar o status e o motivo do atraso de um ticket
     await db.execute(
       'UPDATE tickets SET status = ?, delay_reason = ? WHERE id = ?', // Consulta SQL para atualização
       [status, delayReason, id] // Valores a serem atualizados
+    );
+  }
+
+  // Método estático para atualizar o status de um ticket (incluindo reabertura)
+  static async updateStatus(id, newStatus) {
+    // Executa uma consulta SQL para atualizar o status de um ticket
+    await db.execute(
+      'UPDATE tickets SET status = ? WHERE id = ?', // Consulta SQL para atualização
+      [newStatus, id] // Valores a serem atualizados
     );
   }
 

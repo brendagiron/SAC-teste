@@ -1,14 +1,6 @@
 const Ticket = require('../models/ticket'); // Importa o modelo Ticket para manipular tickets
-const nodemailer = require('nodemailer'); // Importa o módulo nodemailer para enviar e-mails
+const mailer = require('../utils/mailer'); // Importa o módulo mailer
 
-// Configura o transportador de e-mails com o serviço Gmail e as credenciais
-const transporter = nodemailer.createTransport({
-  service: 'Gmail', // Serviço de e-mail utilizado
-  auth: {
-    user: 'your-email@gmail.com', // E-mail utilizado para enviar as mensagens
-    pass: 'your-password' // Senha do e-mail
-  }
-});
 
 // Função para criar um ticket e enviar um e-mail de notificação
 async function createTicket(req, res) {
@@ -21,7 +13,7 @@ async function createTicket(req, res) {
 
     // Envia um e-mail para o setor informando sobre o novo ticket
     await transporter.sendMail({
-      from: 'your-email@gmail.com', // Remetente do e-mail
+      from: process.env.EMAIL_USER, // Remetente do e-mail
       to: sectorEmail, // Destinatário do e-mail
       subject: 'Novo Chamado Recebido', // Assunto do e-mail
       text: `Novo chamado foi criado com ID ${ticketId}. Assunto: ${subject}. Descrição: ${description}.` // Corpo do e-mail
@@ -30,6 +22,8 @@ async function createTicket(req, res) {
     // Responde com o status 201 (Criado) e o ID do ticket
     res.status(201).json({ id: ticketId });
   } catch (error) {
+    // Registra o erro detalhado no console para ajudar no diagnóstico
+    console.error('Error creating ticket:', error);
     // Se ocorrer um erro, responde com o status 500 e uma mensagem de erro
     res.status(500).json({ message: 'Error creating ticket' });
   }
@@ -49,20 +43,39 @@ async function updateTicketStatusWithDelay(req, res) {
   }
 };
 
+// Função para reabrir um ticket
+async function reopenTicket(req, res) {
+    const { ticketId } = req.body;
+    try {
+      const updated = await Ticket.updateStatus(ticketId, 'reaberto'); // 'reaberto' deve ser um status válido no seu sistema
+      if (updated) {
+        // Se necessário, envie um e-mail notificando a reabertura
+        const sectorEmail = mailer.sectorEmails[sectorId] || 'default@example.com'; // Assumindo que você tenha o sectorId no req.body ou de outra forma
+        await mailer.sendMail({
+          from: process.env.EMAIL_USER,
+          to: sectorEmail,
+          subject: 'Chamado Reaberto',
+          text: `O chamado com ID ${ticketId} foi reaberto.`
+        });
+        res.status(200).json({ message: 'Chamado reaberto com sucesso.' });
+      } else {
+        res.status(404).json({ message: 'Chamado não encontrado.' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao reabrir o chamado.' });
+    }
+  }
+
 // Função para obter o e-mail do setor com base no ID do setor
 function getSectorEmail(sectorId) {
-  const sectorEmails = {
-    1: 'tech-support@example.com', // E-mail para o setor 1
-    2: 'dev-team@example.com', // E-mail para o setor 2
-    3: 'admin@example.com' // E-mail para o setor 3
-  };
-  // Retorna o e-mail correspondente ao ID do setor ou um e-mail padrão se o ID não for encontrado
-  return sectorEmails[sectorId] || 'default@example.com';
+    // Retorna o e-mail correspondente ao ID do setor ou um e-mail padrão se o ID não for encontrado
+    return sectorEmails[sectorId] || 'default@example.com';
 }
 
 // Exporta as funções
 module.exports = {
     createTicket,
     updateTicketStatusWithDelay,
+    reopenTicket,
     getSectorEmail
   };

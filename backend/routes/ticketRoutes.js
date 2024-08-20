@@ -6,7 +6,8 @@ const ticketController = require('../controllers/ticketController'); // Importa 
 router.post('/tickets', ticketController.createTicket);
 
 // Define a rota para atualizar o status de um ticket com motivo de atraso
-router.post('/tickets/status-with-delay', ticketController.updateTicketStatusWithDelay);
+//router.post('/tickets/status-with-delay', ticketController.updateTicketStatusWithDelay);
+router.put('/tickets/status/delay', ticketController.updateTicketStatusWithDelay);
 
 // Define a rota para reabrir um ticket
 router.post('/tickets/reopen', ticketController.reopenTicket);
