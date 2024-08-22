@@ -45,4 +45,5 @@ npm install axios
 npm install nodemailer
 npm install json2csv
 npm instal dotev
+npm install mysql2
 npm start

@@ -1,12 +1,11 @@
-/*
 const mysql = require('mysql2');
 
 // Cria a conexão com o db
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
-  database: ''
+  password: '123',
+  database: 'teste'
 });
 
 // Conectando ao banco de dados
@@ -19,4 +18,4 @@ connection.connect((err) => {
 });
 
 module.exports = connection;
-*/
+

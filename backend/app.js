@@ -10,8 +10,8 @@ const reportRoutes = require('./routes/reportRoutes');
 app.use(express.json());
 
 // Define que as rotas de tickets e relatórios estarão sob o caminho base '/api'
-app.use('/api', ticketRoutes); // Adiciona as rotas de tickets ao caminho '/api'
-app.use('/api', reportRoutes); // Adiciona as rotas de relatórios ao caminho '/api'
+app.use('/api/tickets', ticketRoutes); // Adiciona as rotas de tickets ao caminho '/api'
+app.use('/api/reports', reportRoutes); // Adiciona as rotas de relatórios ao caminho '/api'
 
 // Define uma rota para o caminho raiz que fornece uma mensagem de boas-vindas
 app.get('/', (req, res) => {
@@ -19,7 +19,12 @@ app.get('/', (req, res) => {
   });
 
 // Inicia o servidor na porta 5000 e exibe uma mensagem quando o servidor estiver em execução
-const PORT = process.env.PORT || 5000;
+/*const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});*/
+
+const PORT = process.env.PORT || 5001; 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
